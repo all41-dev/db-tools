@@ -7,7 +7,7 @@ export class DbTools {
   constructor(sequelize: Sequelize) {
     this._sequelize = sequelize;
   }
-  public async getDbNames(appName?: string) {
+  public async getDbNames(appName?: string): Promise<string[]> {
     const res = await this._sequelize.query('SHOW DATABASES;');
     const dbNames: string[] = res[0].map((r: any) => r['Database']);
     if (!appName) {
@@ -46,15 +46,7 @@ export class DbTools {
       return undefined;
     }
   }
-  private async setFunction(functionName: string, value: any, type: string = 'VARCHAR(200)'): Promise<void> {
-    const quote = typeof value === 'string' ? '\'' : '';
-    await this._sequelize.query(`DROP FUNCTION IF EXISTS ${functionName};
-      CREATE FUNCTION ${functionName}() RETURNS ${type}
-BEGIN
-  RETURN ${quote}${value}${quote};
-END;`);
-    }
-  async update(scriptsFolder: string) {
+  public async update(scriptsFolder: string): Promise<void> {
     const currentVersion = await this.getVersion();
     let files = fs.readdirSync(scriptsFolder)
       .filter((f) => f.toLowerCase().endsWith('.sql'))
@@ -63,9 +55,10 @@ END;`);
       .map((f) => ({
         file: `${f}.sql`,
         semver: new SemVer(f),
-    }));
+      }));
 
     if (currentVersion) {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       files = files.filter((f) =>  gt(f.semver, currentVersion!));
     }
     
@@ -74,9 +67,19 @@ END;`);
         const fileContent = fs.readFileSync(`${scriptsFolder}/${file.file}`).toString();
         await this._sequelize.query(fileContent);
       } catch (error) {
+        // eslint-disable-next-line no-console
         console.error(error);
       }
     }
     await this.setVersion(files.pop()?.semver);
   }
+  private async setFunction(functionName: string, value: any, type = 'VARCHAR(200)'): Promise<void> {
+    const quote = typeof value === 'string' ? '\'' : '';
+    await this._sequelize.query(`DROP FUNCTION IF EXISTS ${functionName};
+      CREATE FUNCTION ${functionName}() RETURNS ${type}
+BEGIN
+  RETURN ${quote}${value}${quote};
+END;`);
+    // eslint-disable-next-line @typescript-eslint/indent
+    }
 }

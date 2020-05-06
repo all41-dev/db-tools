@@ -4,10 +4,16 @@
   "description": "manage databade updates",
   "main": "./dist/index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist/**/*"
+  ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "echo \"no test specified\" && exit 0",
+    "lint": "eslint src/**",
     "start": "node ./dist/test.js",
-    "build": "tsc"
+    "build": "tsc",
+    "preversion": "run-p test lint build",
+    "postversion": "git push && git push --tags && npm publish --access public"
   },
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
@@ -27,7 +33,10 @@
     "@types/bluebird": "^3.5.30",
     "@types/semver": "^7.1.0",
     "@types/validator": "^13.0.0",
+    "@typescript-eslint/eslint-plugin": "^2.17.0",
+    "@typescript-eslint/parser": "^2.17.0",
     "mariadb": "^2.3.1",
+    "eslint": "^6.8.0",
     "reflect-metadata": "^0.1.13",
     "sequelize": "^5.21.7",
     "sequelize-typescript": "^1.1.0"
