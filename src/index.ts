@@ -46,25 +46,14 @@ export class DbTools {
       return undefined;
     }
   }
+  public async updateRequired(scriptsFolder: string): Promise<boolean> {
+    return (await this._getRequiredUpdateFiles(scriptsFolder)).some(() => true);
+  }
   public async update(scriptsFolder: string): Promise<void> {
-    const currentVersion = await this.getVersion();
-    let files = fs.readdirSync(scriptsFolder)
-      .filter((f) => f.toLowerCase().endsWith('.sql'))
-      .map((f) => f.substr(0, f.length-4))
-      .sort(compare)    
-      .map((f) => ({
-        file: `${f}.sql`,
-        semver: new SemVer(f),
-      }));
-
-    if (currentVersion) {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      files = files.filter((f) =>  gt(f.semver, currentVersion!));
-    }
-    
+    const files = await this._getRequiredUpdateFiles(scriptsFolder);
     for (const file of files) {
       try {
-        const fileContent = fs.readFileSync(`${scriptsFolder}/${file.file}`).toString();
+        const fileContent = fs.readFileSync(`${file.file}`).toString();
         await this._sequelize.query(fileContent);
       } catch (error) {
         // eslint-disable-next-line no-console
@@ -72,6 +61,23 @@ export class DbTools {
       }
     }
     await this.setVersion(files.pop()?.semver);
+  }
+  private async _getRequiredUpdateFiles(scriptsFolder: string): Promise<{file: string; semver: SemVer}[]> {
+    const currentVersion = await this.getVersion();
+    let files = fs.readdirSync(scriptsFolder)
+      .filter((f) => f.toLowerCase().endsWith('.sql'))
+      .map((f) => f.substr(0, f.length-4))
+      .sort(compare)    
+      .map((f) => ({
+        file: `${scriptsFolder}/${f}.sql`,
+        semver: new SemVer(f),
+      }));
+
+    if (currentVersion) {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      files = files.filter((f) =>  gt(f.semver, currentVersion!));
+    }
+    return files;
   }
   private async setFunction(functionName: string, value: any, type = 'VARCHAR(200)'): Promise<void> {
     const quote = typeof value === 'string' ? '\'' : '';

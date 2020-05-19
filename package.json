@@ -24,7 +24,7 @@
     "db"
   ],
   "author": "all41 <eric@all41.dev>",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "semver": "^7.3.2",
     "typescript": "^3.8.3"
