@@ -7,7 +7,7 @@ import { Logger } from 'winston';
 export abstract class Db<T extends Db<T>> {
   public static inst: Db<any>;
   public sequelize!: Sequelize;
-  public logger: Logger;
+  public logger?: Logger;
   protected _options: IDbOptions<Db<T>>;
   public constructor(options: IDbOptions<Db<T>>) {
     this._options = options;
@@ -20,7 +20,7 @@ export abstract class Db<T extends Db<T>> {
   protected async _init(): Promise<void> {
     try {
       await this.sequelize.authenticate();
-      this.logger.info({
+      this.logger?.info({
         message: `Connection has been established successfully from #${os.hostname} on #database #${this._options.dbName}`,
         hash: 'db-connection'
       });
@@ -36,7 +36,7 @@ export abstract class Db<T extends Db<T>> {
         }
       }
     } catch (err) {
-      this.logger.error({
+      this.logger?.error({
         message: `Unable to connect to the #database #${this._options.dbName} from #${os.hostname}`,
         hash: 'db-connection',
         error: err,
@@ -60,7 +60,7 @@ export abstract class Db<T extends Db<T>> {
       dialect: this._options.engine,
       host: this._options.hostname || 'localhost',
       logging: this._options.logging ?
-        this.logger.info : false,
+        this.logger?.info : false,
       password: this._options.password,
       pool: {
         acquire: 1000 * 60 * 5,// 5 min
