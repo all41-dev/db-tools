@@ -1,6 +1,6 @@
 {
   "name": "@all41-dev/db-tools",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "manage databade updates",
   "main": "./dist/index.js",
   "types": "dist/index.d.ts",
@@ -19,7 +19,11 @@
     "registry": "https://npm.pkg.github.com/"
   },
   "keywords": [
-    "database", "update", "db", "sequelize", "sequelize-typescript"
+    "database",
+    "update",
+    "db",
+    "sequelize",
+    "sequelize-typescript"
   ],
   "author": "all41 <eric@all41.dev>",
   "license": "MIT",
