@@ -20,5 +20,5 @@ export interface IDbOptions<T extends Db<any>> {
     scriptsFolder?: string;
     updateOnStartup?: boolean;
   };
-  logger: winston.Logger;
+  logger?: winston.Logger;
 }
