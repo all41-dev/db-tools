@@ -1,4 +1,4 @@
-import { DbTools } from "./index";
+import { DbTools } from "./db-tools";
 import { Sequelize } from "sequelize-typescript";
 
 const sequelize = new Sequelize({
