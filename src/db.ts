@@ -75,6 +75,7 @@ export abstract class Db<T extends Db<T>> {
 
     switch (options.dialect) {
       case 'mysql' :
+      case 'mariadb' :
         options.dialectOptions = {
           socketPath: this._options.proxy,
           connectTimeout: 1000 * 60 * 5,// 5 minutes
