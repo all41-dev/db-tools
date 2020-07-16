@@ -28,10 +28,10 @@ export abstract class Db<T extends Db<T>> {
         const tools = new DbTools(this.sequelize);
         if (this._options.dbTools.updateOnStartup) {
           if (this._options.dbTools.app) {
-            tools.setApp(this._options.dbTools.app);
+            await tools.setApp(this._options.dbTools.app);
           }
           if (this._options.dbTools.scriptsFolder) {
-            tools.update(this._options.dbTools.scriptsFolder)
+            await tools.update(this._options.dbTools.scriptsFolder);
           }
         }
       }

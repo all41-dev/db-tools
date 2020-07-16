@@ -22,10 +22,10 @@ export class DbTools {
     return appDbNames;
   }
   public async getApp(dbName?: string): Promise<string | undefined> {
-    return this.getFunction('__application', dbName);
+    return await this.getFunction('__application', dbName);
   }
   public async setApp(appName: string): Promise<void> {
-    return this.setFunction('__application', appName);
+    return await this.setFunction('__application', appName);
   }
   public async getVersion(dbName?: string): Promise<SemVer | undefined> {
     const res = await this.getFunction('__dbVersion', dbName);
@@ -34,7 +34,7 @@ export class DbTools {
   }
   public async setVersion(version?: SemVer): Promise<void> {
     if (!version) return;
-    this.setFunction('__dbVersion', version.raw);
+    await this.setFunction('__dbVersion', version.raw);
   }
   public async getFunction(name: string, dbName?: string): Promise<any | undefined> {
     try {
