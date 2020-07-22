@@ -18,7 +18,7 @@ export abstract class Db<T extends Db<T>> {
   }
 
   protected async _init(): Promise<void> {
-    const dbContext = `${this._options.engine} ${this._options.hostname}.${this._options.dbName} from #${os.hostname}`;
+    const dbContext = `${this._options.engine} ${this._options.hostname}.${this._options.dbName} from ${os.hostname}`;
     try {
       await this.sequelize.authenticate();
       this.logger?.info({
