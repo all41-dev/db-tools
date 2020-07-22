@@ -81,6 +81,7 @@ export abstract class Db<T extends Db<T>> {
           connectTimeout: 1000 * 60 * 5,// 5 minutes
           decimalNumbers: this._options.mysqlDecimalNumbers,
           multipleStatements: this._options.multipleStatements,
+          timezone: this._options.timezone,
         };
         break;
       case 'mssql' :
@@ -91,6 +92,7 @@ export abstract class Db<T extends Db<T>> {
 
         options.dialectOptions = {
           instanceName: this._options.instanceName,
+          timezone: this._options.timezone,
         };
         break;
       default :
