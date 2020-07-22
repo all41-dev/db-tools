@@ -18,10 +18,11 @@ export abstract class Db<T extends Db<T>> {
   }
 
   protected async _init(): Promise<void> {
+    const dbContext = `${this._options.engine} ${this._options.hostname}.${this._options.dbName} from #${os.hostname}`;
     try {
       await this.sequelize.authenticate();
       this.logger?.info({
-        message: `Connection has been established successfully from #${os.hostname} on #database #${this._options.dbName}`,
+        message: `Connected to ${dbContext}`,
         hash: 'db-connection'
       });
       if (this._options.dbTools) {
@@ -37,7 +38,7 @@ export abstract class Db<T extends Db<T>> {
       }
     } catch (err) {
       this.logger?.error({
-        message: `Unable to connect to the #database #${this._options.dbName} from #${os.hostname}`,
+        message: `Unable to connect to ${dbContext}`,
         hash: 'db-connection',
         error: err,
       });
