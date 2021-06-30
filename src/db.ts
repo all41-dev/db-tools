@@ -82,7 +82,7 @@ export abstract class Db<T extends Db<T>> {
           connectTimeout: 1000 * 60 * 5,// 5 minutes
           decimalNumbers: this._options.mysqlDecimalNumbers,
           multipleStatements: this._options.multipleStatements,
-          timezone: this._options.timezone || 'Europe/Zurich',
+          timezone: this._options.timezone || '+00:00',
         };
         break;
       case 'mssql' :
@@ -105,5 +105,5 @@ export abstract class Db<T extends Db<T>> {
   /**
    * @description must await call _init as first instruction
    */
-  public abstract async init(): Promise<void>;
+  public abstract init(): Promise<void>;
 }
