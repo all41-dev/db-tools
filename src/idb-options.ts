@@ -2,6 +2,7 @@ import winston from 'winston';
 import { Db } from './db';
 
 export interface IDbOptions<T extends Db<any>> {
+  isMock?: false;
   type: { inst: T; new(options: IDbOptions<T>): T };
   proxy?: string;
   mysqlDecimalNumbers?: boolean;
@@ -22,4 +23,9 @@ export interface IDbOptions<T extends Db<any>> {
     updateOnStartup?: boolean;
   };
   logger?: winston.Logger;
+}
+
+export interface IDBMockOptions<T extends Db<any>> {
+  isMock: true;
+  type: { inst: T; new(options: IDbOptions<T>): T };
 }

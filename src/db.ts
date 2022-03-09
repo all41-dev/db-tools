@@ -1,5 +1,5 @@
 import { DataType, Sequelize, SequelizeOptions } from 'sequelize-typescript';
-import { IDbOptions } from './idb-options';
+import { IDBMockOptions, IDbOptions } from './idb-options';
 import { DbTools } from './db-tools';
 import os from 'os';
 import { Logger } from 'winston';
@@ -8,16 +8,31 @@ export abstract class Db<T extends Db<T>> {
   public static inst: Db<any>;
   public sequelize!: Sequelize;
   public logger?: Logger;
-  protected _options: IDbOptions<Db<T>>;
-  public constructor(options: IDbOptions<Db<T>>) {
+  protected _options: IDbOptions<Db<T>> | IDBMockOptions<Db<T>>;
+  public constructor(options: IDbOptions<Db<T>> | IDBMockOptions<Db<T>>) {
     this._options = options;
     options.type.inst = this;
-    this.logger = options.logger;
 
+    if (!options.isMock) {
+      this.logger = options.logger;
+    }
     this._configureSequelize();
   }
 
   protected async _init(): Promise<void> {
+    if (this._options.isMock) {
+      try {
+        await this.sequelize.authenticate();
+        this.logger?.info({
+          message: `Connected to MOCK`,
+          hash: 'db-connection'
+        });
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error('MOCK db init error');
+      }
+      return;
+    }
     const dbContext = `${this._options.engine} ${this._options.hostname}.${this._options.dbName} from ${os.hostname}`;
     try {
       await this.sequelize.authenticate();
@@ -46,6 +61,10 @@ export abstract class Db<T extends Db<T>> {
   }
   
   protected _configureSequelize(): void {
+    if (this._options.isMock) {
+      this.sequelize = new Sequelize('sqlite::memory:');
+      return;
+    }
     if (this._options.engine === 'sqlite' && !this._options.sqliteStoragePath) {
       throw new Error('When db engine is sqlite, sqliteStoragePath must be set. Aborting..');
     }
