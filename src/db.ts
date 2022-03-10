@@ -62,7 +62,9 @@ export abstract class Db<T extends Db<T>> {
   
   protected _configureSequelize(): void {
     if (this._options.isMock) {
-      this.sequelize = new Sequelize('sqlite::memory:');
+      this.sequelize = new Sequelize('sqlite::memory:', {
+        logging: false
+      });
       return;
     }
     if (this._options.engine === 'sqlite' && !this._options.sqliteStoragePath) {
