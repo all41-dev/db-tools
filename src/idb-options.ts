@@ -23,6 +23,7 @@ export interface IDbOptions<T extends Db<any>> {
     updateOnStartup?: boolean;
   };
   logger?: winston.Logger;
+  mute?: boolean;
 }
 
 export interface IDBMockOptions<T extends Db<any>> {

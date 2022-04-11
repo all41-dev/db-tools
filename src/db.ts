@@ -36,10 +36,12 @@ export abstract class Db<T extends Db<T>> {
     const dbContext = `${this._options.engine} ${this._options.hostname}.${this._options.dbName} from ${os.hostname}`;
     try {
       await this.sequelize.authenticate();
-      this.logger?.info({
-        message: `Connected to ${dbContext}`,
-        hash: 'db-connection'
-      });
+      if (!this._options.mute) {
+        this.logger?.info({
+          message: `Connected to ${dbContext}`,
+          hash: 'db-connection'
+        });
+      }
       if (this._options.dbTools) {
         const tools = new DbTools(this.sequelize);
         if (this._options.dbTools.updateOnStartup) {

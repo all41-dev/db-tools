@@ -4,7 +4,7 @@ import { Sequelize } from "sequelize-typescript";
 const sequelize = new Sequelize({
   database: 'dbup',
   username: 'root',
-  password: 'yri956',
+  password: process.env.PASSWORD,
   host: 'localhost',
   dialect: 'mariadb',
   logging: false,
