@@ -12,6 +12,8 @@
     "lint": "eslint src/**",
     "start": "node ./dist/test.js",
     "build": "tsc",
+    "ncu:view": "ncu -x ,sequelize,typescript",
+    "ncu:upd": "ncu -x sequelize,typescript -u && npm i",
     "preversion": "run-p test lint build",
     "postversion": "git push && git push --tags && npm publish --access public"
   },
@@ -28,23 +30,22 @@
   "author": "all41 <eric@all41.dev>",
   "license": "MIT",
   "dependencies": {
-    "semver": "^7.3.2",
-    "sequelize": "6.17.0",
-    "sequelize-typescript": "2.1.3",
-    "sqlite3": "^5.0.2",
+    "semver": "^7.3.8",
+    "sequelize": "6.28.0",
+    "sequelize-typescript": "2.1.5",
     "typescript": "^4.6.2"
   },
   "devDependencies": {
-    "@types/bluebird": "^3.5.33",
-    "@types/semver": "^7.3.4",
-    "@types/validator": "^13.1.0",
-    "@typescript-eslint/eslint-plugin": "^5.15.0",
-    "@typescript-eslint/parser": "^5.15.0",
-    "eslint": "^7.12.1",
-    "mariadb": "^2.5.1",
+    "@types/semver": "^7.3.13",
+    "@types/validator": "^13.7.12",
+    "@typescript-eslint/eslint-plugin": "^5.51.0",
+    "@typescript-eslint/parser": "^5.51.0",
+    "eslint": "^8.33.0",
+    "mariadb": "^3.0.2",
     "npm-run-all": "^4.1.5",
     "reflect-metadata": "^0.1.13",
-    "winston": "^3.6.0",
+    "sqlite3": "^5.1.4",
+    "winston": "^3.8.2",
     "winston-transport": "^4.5.0"
   }
 }
