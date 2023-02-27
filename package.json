@@ -1,6 +1,6 @@
 {
   "name": "@all41-dev/db-tools",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "description": "manage databade updates",
   "main": "./dist/index.js",
   "types": "dist/index.d.ts",
