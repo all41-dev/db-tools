@@ -1,6 +1,7 @@
 import { Sequelize } from "sequelize-typescript";
 import fs from 'fs';
 import { SemVer, compare, gt } from "semver";
+import { QueryTypes } from "sequelize";
 
 export class DbTools {
   private _sequelize: Sequelize;
@@ -39,9 +40,13 @@ export class DbTools {
   public async getFunction(name: string, dbName?: string): Promise<any | undefined> {
     try {
       const dbPrefix = dbName ? `${dbName}.` : '';
-      const query = `select ${dbPrefix}${name}();`;
-      const res: any = await this._sequelize.query(query);
-      return res[0][0][`${dbPrefix}${name}()`];
+      const prop = `${dbPrefix}${name}()`;
+      const query = `select ${prop};`;
+      const res: any = await this._sequelize.query(query, {
+        type: QueryTypes.SELECT,
+        plain: true,
+      } );
+      return res[prop];
     } catch (error) {
       return undefined;
     }
