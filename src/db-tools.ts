@@ -86,11 +86,12 @@ export class DbTools {
   }
   private async setFunction(functionName: string, value: any, type = 'VARCHAR(200)'): Promise<void> {
     const quote = typeof value === 'string' ? '\'' : '';
-    await this._sequelize.query(`DROP FUNCTION IF EXISTS ${functionName};
-      CREATE FUNCTION ${functionName}() RETURNS ${type}
+    await this._sequelize.query(`DELIMITER $$
+CREATE OR REPLACE FUNCTION ${functionName}() RETURNS ${type} CHARSET utf8
 BEGIN
   RETURN ${quote}${value}${quote};
-END;`);
+END;
+DELIMITER ;`);
     // eslint-disable-next-line @typescript-eslint/indent
     }
 }
