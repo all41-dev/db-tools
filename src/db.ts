@@ -3,6 +3,7 @@ import { IDBMockOptions, IDbOptions } from './idb-options';
 import { DbTools } from './db-tools';
 import os from 'os';
 import { Logger } from 'winston';
+import { DbDumper } from './db-dumper';
 
 export abstract class Db<T extends Db<T>> {
   public static inst: Db<any>;
@@ -49,6 +50,9 @@ export abstract class Db<T extends Db<T>> {
             await tools.setApp(this._options.dbTools.app);
           }
           if (this._options.dbTools.scriptsFolder) {
+            if (await tools.updateRequired(this._options.dbTools.scriptsFolder) && this._options.dumper?.dumpOnDataBaseUpdate !== false){
+              await new DbDumper(this._options, false, true).DumpNow(`${await tools.getVersion().toString()}_before_update`)
+            }
             await tools.update(this._options.dbTools.scriptsFolder);
           }
         }
@@ -61,7 +65,7 @@ export abstract class Db<T extends Db<T>> {
       });
     }
   }
-  
+
   protected _configureSequelize(): void {
     if (this._options.isMock) {
       this.sequelize = new Sequelize('sqlite::memory:', {
@@ -124,7 +128,7 @@ export abstract class Db<T extends Db<T>> {
 
     this.sequelize = new Sequelize(options);
   }
-  
+
   /**
    * @description must await call _init as first instruction
    */
