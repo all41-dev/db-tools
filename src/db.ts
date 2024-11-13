@@ -4,6 +4,7 @@ import { DbTools } from './db-tools';
 import os from 'os';
 import { Logger } from 'winston';
 import { DbDumper } from './db-dumper';
+import { ConnectionError, DatabaseError, TimeoutError } from 'sequelize';
 
 export abstract class Db<T extends Db<T>> {
   public static inst: Db<any>;
@@ -91,10 +92,14 @@ export abstract class Db<T extends Db<T>> {
         this.logger?.info : false,
       password: this._options.password,
       pool: {
-        acquire: 1000 * 60 * 5,// 5 min
-        idle: 10000,
-        max: 10,
+        acquire: 1000 * 60 * 5,//5 minutes
+        idle: 1000 * 60,//1 minute
+        max: 50,
         min: 1,
+      },
+      retry: {
+        max: 5,
+        match: [ConnectionError, TimeoutError, DatabaseError]
       },
       port: port,
       storage: this._options.sqliteStoragePath,
@@ -121,6 +126,7 @@ export abstract class Db<T extends Db<T>> {
         options.dialectOptions = {
           instanceName: this._options.instanceName,
           timezone: this._options.timezone || 'Europe/Zurich',
+          options: { requestTimeout: 30000 },
         };
         break;
       default :
