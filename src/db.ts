@@ -52,7 +52,7 @@ export abstract class Db<T extends Db<T>> {
           }
           if (this._options.dbTools.scriptsFolder) {
             if (await tools.updateRequired(this._options.dbTools.scriptsFolder) && this._options.dumper?.dumpOnDataBaseUpdate !== false){
-              await new DbDumper(this._options, false, true).DumpNow(`${await tools.getVersion().toString()}_before_update`)
+              await new DbDumper(this._options, false, true).DumpNow(`${(await tools.getVersion())?.toString()}_before_update`)
             }
             await tools.update(this._options.dbTools.scriptsFolder);
           }

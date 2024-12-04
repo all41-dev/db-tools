@@ -134,7 +134,10 @@ export class DbDumper {
     const onError = (error: any) => {
       if (this.logger)
         this.logger.error('error on dumping database ' +  config.dbName, { error });
-      unlinkSync(path.join(this.dumpFolder(), fileName))
+      try {
+        unlinkSync(path.join(this.dumpFolder(), fileName))
+      } catch(err) {
+      }
     }
 
     return new Promise((resolve) => {
