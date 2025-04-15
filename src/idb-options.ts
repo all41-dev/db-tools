@@ -16,6 +16,7 @@ export interface IDbOptions<T extends Db<any>> {
   engine: 'mysql' | 'postgres' | 'mssql' | 'sqlite' | 'mariadb';
   sqliteStoragePath?: string;
   instanceName?: string;
+  repositoryMode?: boolean,
   timezone?: string;
   dbTools?: {
     app?: string;

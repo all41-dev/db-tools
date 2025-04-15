@@ -101,6 +101,7 @@ export abstract class Db<T extends Db<T>> {
         max: 5,
         match: [ConnectionError, TimeoutError, DatabaseError]
       },
+      repositoryMode: this._options.repositoryMode,
       port: port,
       storage: this._options.sqliteStoragePath,
       username: this._options.username,
