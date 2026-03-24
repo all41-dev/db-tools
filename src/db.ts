@@ -105,7 +105,7 @@ export abstract class Db<T extends Db<T>> {
       port: port,
       storage: this._options.sqliteStoragePath,
       username: this._options.username,
-      timezone: this._options.timezone || '00:00'
+      timezone: this._options.timezone || '+00:00'
     };
 
     switch (options.dialect) {
