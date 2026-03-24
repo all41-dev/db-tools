@@ -1,16 +1,25 @@
 {
   "compilerOptions": {
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "target": "ES2018",
+    "target": "ESNEXT",
     "module": "commonjs",
     "declaration": true,
+    "rootDir": "./src",
     "outDir": "./dist",
     "strict": true,
     "esModuleInterop": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "sourceMap": true,
+    "typeRoots": [
+      "types",
+      "./node_modules/@types"
+    ],
+    "lib": [
+      "ESNEXT",
+      "dom"
+    ],
   },
   "include": [
-    "./src/**/*.ts"
+    "./src/**/*.ts",
   ]
 }
