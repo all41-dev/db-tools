@@ -47,7 +47,7 @@ export class DbTools {
         plain: true,
       } );
       return res[prop];
-    } catch (error) {
+    } catch {
       return undefined;
     }
   }
@@ -60,9 +60,7 @@ export class DbTools {
       try {
         const fileContent = fs.readFileSync(`${file.file}`).toString();
         await this._sequelize.query(fileContent);
-      } catch (error) {
-        // eslint-disable-next-line no-console
-        console.error(error);
+      } catch {
       }
     }
     await this.setVersion(files.pop()?.semver);
@@ -72,14 +70,13 @@ export class DbTools {
     let files = fs.readdirSync(scriptsFolder)
       .filter((f) => f.toLowerCase().endsWith('.sql'))
       .map((f) => f.substr(0, f.length-4))
-      .sort(compare)    
+      .sort(compare)
       .map((f) => ({
         file: `${scriptsFolder}/${f}.sql`,
         semver: new SemVer(f),
       }));
 
     if (currentVersion) {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       files = files.filter((f) =>  gt(f.semver, currentVersion!));
     }
     return files;
@@ -90,6 +87,6 @@ export class DbTools {
 BEGIN
   RETURN ${quote}${value}${quote};
 END;`, { type: QueryTypes.RAW});
-    // eslint-disable-next-line @typescript-eslint/indent
+    // eslint-disable-next-line @stylistic/ts/indent
     }
 }

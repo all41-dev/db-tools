@@ -29,9 +29,7 @@ export abstract class Db<T extends Db<T>> {
           message: `Connected to MOCK`,
           hash: 'db-connection'
         });
-      } catch (err) {
-        // eslint-disable-next-line no-console
-        console.error('MOCK db init error');
+      } catch {
       }
       return;
     }

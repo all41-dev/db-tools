@@ -136,7 +136,7 @@ export class DbDumper {
         this.logger.error('error on dumping database ' +  config.dbName, { error });
       try {
         unlinkSync(path.join(this.dumpFolder(), fileName))
-      } catch(err) {
+      } catch {
       }
     }
 
